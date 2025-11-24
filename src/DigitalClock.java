@@ -4,10 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class DigitalClock extends JFrame implements Runnable{
+public class DigitalClock extends JFrame {
     JLabel ltime;
     public DigitalClock() {
         InitFrame();
+        startTimer();
     }
     // 初始化
     public void InitFrame() {
@@ -23,8 +24,6 @@ public class DigitalClock extends JFrame implements Runnable{
         ltime.setForeground(Color.white);
         add(ltime,BorderLayout.CENTER);
 
-        Thread t = new Thread(this);
-        t.start();
         setVisible(true);
     }
     public String getCurrTime() {
@@ -33,19 +32,15 @@ public class DigitalClock extends JFrame implements Runnable{
         return "当前日期时间：" + fortime;
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                SwingUtilities.invokeLater(() -> ltime.setText(getCurrTime())); // 防止线程竞争
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    // 启动定时器
+    private void startTimer() {
+        Timer timer = new Timer(1000, e -> ltime.setText(getCurrTime()));
+        timer.start();
     }
 
     public static void main(String[] args) {
-        new DigitalClock();
+        SwingUtilities.invokeLater(() -> {
+            DigitalClock digitalClock = new DigitalClock();
+        });
     }
 }
