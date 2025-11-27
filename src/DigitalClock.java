@@ -179,8 +179,7 @@ public class DigitalClock extends JFrame {
         timeLabel.setText(getCurrentTime());
     }
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            DigitalClock digitalClock = new DigitalClock();
-        });
+        // 确保 Swing 组件在事件分发线程（EDT）中创建和更新
+        SwingUtilities.invokeLater(DigitalClock::new);
     }
 }
